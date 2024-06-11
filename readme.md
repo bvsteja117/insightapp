@@ -1,5 +1,5 @@
 # Installation
-1. Install anaconda/miniconda and create an environment with python version 3.9.19, or run the command `conda create -n ENV_NAME python=3.9.19` replace 'ENV-NAME' which what you want to call your environment.
+1. Install anaconda/miniconda and create an environment with python version 3.9.19, or run the command `conda create -n ENV_NAME python=3.9.19` replace 'ENV_NAME' which what you want to call your environment.
 2. Load your environment using `conda activate ENV_NAME`
 1. To install the required dependencies run `pip install -r requirements.txt`
 2. Download the repo using `git clone https://github.com/bvsteja117/insightapp.git` 
