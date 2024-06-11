@@ -8,7 +8,7 @@
 # Usage
 
 ### Adding new people to the database
-1. Go to the **`Add/Modify` tab.**
+1. Go to the `Add/Modify` tab.
 2. Type the name of the employee in the text box.
 3. Click `Add New Entry` and make sure to have the employee in front of the camera.
 4. Rotate face in a circle to cover all angles 
@@ -26,5 +26,5 @@
 1. Go to the `Check In/Check Out` tab.
 2. Click `Check-In` to check someone in.
 3. Click `Check-out` to check someone out.
-##### NOTE: SOMEONE MUST BE CHECKED IN FIRST TO BE CHECKED OUT
+#### **NOTE: SOMEONE MUST BE CHECKED IN FIRST TO BE CHECKED OUT**
 
