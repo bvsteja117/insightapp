@@ -108,11 +108,16 @@ class FaceDatabaseManager(QMainWindow):
         self.tabs.addTab(view_tab, "View")
         self.view_button = QPushButton('View all entries', self)
         self.view_button.clicked.connect(self.view_database)
-        self.view_status_display = QTextEdit(self)
-        self.view_status_display.setReadOnly(True)
+        
+        # Create a QTableWidget
+        self.view_table = QTableWidget()
+        self.view_table.setColumnCount(2)
+        self.view_table.setHorizontalHeaderLabels(["Person Name", "Number of Embeddings"])
+        self.view_table.horizontalHeader().setStretchLastSection(True)
+
         layout = QVBoxLayout()
         layout.addWidget(self.view_button)
-        layout.addWidget(self.view_status_display)
+        layout.addWidget(self.view_table)
         view_tab.setLayout(layout)
 
     def initContractorDetailsTab(self):
@@ -418,19 +423,22 @@ class FaceDatabaseManager(QMainWindow):
         self.record_video(person_name, "capture")
 
     def view_database(self):
-        self.view_status_display.clear()
-        try:
-            database = load_database()
-            if not database:
-                self.view_status_display.append("No entries found in the database.")
-            else:
-                self.view_status_display.append("Database entries:")
-                for person_name, embeddings in database.items():
-                    self.view_status_display.append(f"{person_name}: {len(embeddings)} embeddings")
-            logging.info("Viewed database entries")
-        except Exception as e:
-            logging.error(f"Error viewing database: {e}")
-            QMessageBox.critical(self, "Error", "An error occurred while viewing the database.")
+        self.view_table.setRowCount(0)  # Clear existing data
+    try:
+        database = load_database()
+        if not database:
+            self.view_table.setRowCount(1)
+            self.view_table.setItem(0, 0, QTableWidgetItem("No entries found"))
+            self.view_table.setItem(0, 1, QTableWidgetItem(""))
+        else:
+            self.view_table.setRowCount(len(database))
+            for row, (person_name, embeddings) in enumerate(database.items()):
+                self.view_table.setItem(row, 0, QTableWidgetItem(person_name))
+                self.view_table.setItem(row, 1, QTableWidgetItem(str(len(embeddings))))
+        logging.info("Viewed database entries")
+    except Exception as e:
+        logging.error(f"Error viewing database: {e}")
+        QMessageBox.critical(self, "Error", "An error occurred while viewing the database.")
 
     def view_employees(self):
         self.view_table(self.employees_display, get_all_employees, "employees")
