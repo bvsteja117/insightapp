@@ -4,7 +4,7 @@ import sys
 import logging
 import shutil
 import time
-
+import serial
 import cv2
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -24,7 +24,8 @@ from face_recognition.face_recognition_manager import load_database, recognize_f
 from video_capture.video_capture_thread import VideoCaptureThread
 
 ipcam = "rtsp://admin:1234Admin@192.168.1.250:554/cam/realmonitor?channel=1&subtype=0"
-
+port = 'COM3'
+ser=serial.Serial(port=port, baudrate=9600, timeout=0.1)
 logging.basicConfig(level=logging.INFO, filename='app.log', filemode='a',
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
@@ -601,7 +602,8 @@ class FaceDatabaseManager(QMainWindow):
                 identity, confidence = recognize_face(embedding, self.face_database)
 
                 # labelling
-                label = f"{identity}" if identity != "Unknown" else f"Unknown"
+                label = f"{identity}" if identity != "Unknown" else f"Unknown"; ser.write(b'1') if identity != "Unknown" else ser.write(b'0')
+                # label = f"{identity}" if identity != "Unknown" else f"Unknown"
                 # label = f"{identity} ({confidence:.2f})" if identity != "Unknown" else f"Unknown ({confidence:.2f})"
 
                 color = (0, 255, 0) if identity != "Unknown" else (0, 0, 255)
@@ -644,7 +646,8 @@ class FaceDatabaseManager(QMainWindow):
                 bbox = face.bbox.astype(int)
                 embedding = face.normed_embedding
                 identity, confidence = recognize_face(embedding, self.face_database)
-                label = f"{identity} ({confidence:.2f})" if identity != "Unknown" else f"Unknown ({confidence:.2f})"
+                label = f"{identity}" if identity != "Unknown" else f"Unknown"; ser.write(b'1') if identity != "Unknown" else ser.write(b'0')
+                # label = f"{identity} ({confidence:.2f})" if identity != "Unknown" else f"Unknown ({confidence:.2f})"
                 color = (0, 255, 0) if identity != "Unknown" else (0, 0, 255)
                 cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[2], bbox[3]), color, 2)
                 cv2.putText(frame, label, (bbox[0], bbox[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
@@ -740,7 +743,8 @@ class FaceDatabaseManager(QMainWindow):
                 bbox = face.bbox.astype(int)
                 embedding = face.normed_embedding
                 identity, confidence = recognize_face(embedding, self.face_database)
-                label = f"{identity} ({confidence:.2f})" if identity != "Unknown" else f"Unknown ({confidence:.2f})"
+                label = f"{identity}" if identity != "Unknown" else f"Unknown"; ser.write(b'1') if identity != "Unknown" else ser.write(b'0')
+                # label = f"{identity} ({confidence:.2f})" if identity != "Unknown" else f"Unknown ({confidence:.2f})"
                 color = (0, 255, 0) if identity != "Unknown" else (0, 0, 255)
                 cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[2], bbox[3]), color, 2)
                 cv2.putText(frame, label, (bbox[0], bbox[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
