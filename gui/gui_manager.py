@@ -424,21 +424,21 @@ class FaceDatabaseManager(QMainWindow):
 
     def view_database(self):
         self.view_table.setRowCount(0)  # Clear existing data
-    try:
-        database = load_database()
-        if not database:
-            self.view_table.setRowCount(1)
-            self.view_table.setItem(0, 0, QTableWidgetItem("No entries found"))
-            self.view_table.setItem(0, 1, QTableWidgetItem(""))
-        else:
-            self.view_table.setRowCount(len(database))
-            for row, (person_name, embeddings) in enumerate(database.items()):
-                self.view_table.setItem(row, 0, QTableWidgetItem(person_name))
-                self.view_table.setItem(row, 1, QTableWidgetItem(str(len(embeddings))))
-        logging.info("Viewed database entries")
-    except Exception as e:
-        logging.error(f"Error viewing database: {e}")
-        QMessageBox.critical(self, "Error", "An error occurred while viewing the database.")
+        try:
+            database = load_database()
+            if not database:
+                self.view_table.setRowCount(1)
+                self.view_table.setItem(0, 0, QTableWidgetItem("No entries found"))
+                self.view_table.setItem(0, 1, QTableWidgetItem(""))
+            else:
+                self.view_table.setRowCount(len(database))
+                for row, (person_name, embeddings) in enumerate(database.items()):
+                    self.view_table.setItem(row, 0, QTableWidgetItem(person_name))
+                    self.view_table.setItem(row, 1, QTableWidgetItem(str(len(embeddings))))
+            logging.info("Viewed database entries")
+        except Exception as e:
+            logging.error(f"Error viewing database: {e}")
+            QMessageBox.critical(self, "Error", "An error occurred while viewing the database.")
 
     def view_employees(self):
         self.view_table(self.employees_display, get_all_employees, "employees")
