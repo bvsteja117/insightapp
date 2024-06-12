@@ -6,8 +6,8 @@ import numpy as np
 from PyQt5.QtCore import QThread, pyqtSignal
 from face_recognition.face_recognition_manager import get_face_embedding_and_crop, update_database
 from config import IMAGE_FOLDER
-
-ipcam= "rtsp://admin:1234Admin@192.168.1.250:554/cam/realmonitor?channel=1&subtype=0"
+ipcam=0
+# ipcam= "rtsp://admin:1234Admin@192.168.1.250:554/cam/realmonitor?channel=1&subtype=0"
 def create_directory_structure(person_name):
     person_path = os.path.join(IMAGE_FOLDER, person_name)
     if not os.path.exists(person_path):
@@ -50,6 +50,7 @@ class VideoCaptureThread(QThread):
                     cv2.imwrite(frame_path, cropped_face)
                     self.embeddingCaptured.emit(embedding, cropped_face, frame_path)
                     frame_count += 1
+
                 else:
                     self.stop()
         cap.release()
