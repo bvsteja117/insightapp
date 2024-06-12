@@ -44,12 +44,14 @@ class VideoCaptureThread(QThread):
             elapsed_time = current_time - start_time
             if int(elapsed_time * 30) % frame_interval == 0:
                 embedding, cropped_face = get_face_embedding_and_crop(frame)
-                if embedding is not None and cropped_face is not None:
+                if embedding is not None and cropped_face is not None and frame_count<100:
                     new_embeddings.append(embedding)
                     frame_path = os.path.join(output_dir, f"{self.person_name}_{frame_count:04d}.jpg")
                     cv2.imwrite(frame_path, cropped_face)
                     self.embeddingCaptured.emit(embedding, cropped_face, frame_path)
                     frame_count += 1
+                else:
+                    self.stop()
         cap.release()
         if new_embeddings:
             update_database(self.person_name, new_embeddings)
